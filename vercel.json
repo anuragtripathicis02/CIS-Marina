@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
   "installCommand": "corepack enable && pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm --filter @yacht-platform/web build",
+  "buildCommand": "pnpm turbo run build --filter=@yacht-platform/web",
   "outputDirectory": "apps/web/.next"
 }
