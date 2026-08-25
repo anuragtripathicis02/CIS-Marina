@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "installCommand": "cd ../.. && corepack pnpm@9.15.9 install --frozen-lockfile",
+  "buildCommand": "cd ../.. && pnpm turbo run build --filter=@yacht-platform/web && rm -rf apps/api/.next && cp -R apps/web/.next apps/api/.next",
+  "outputDirectory": ".next"
+}
