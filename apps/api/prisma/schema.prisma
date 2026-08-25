@@ -1,0 +1,2302 @@
+// Prisma Schema for Smart Yacht & Marina Management Platform (Phase 1 & Phase 2 Operations)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ORG_ADMIN
+  OPS_MANAGER
+  BOOKING_MANAGER
+  FLEET_MANAGER
+  CREW_MANAGER
+  FINANCE_MANAGER
+  CUSTOMER_SUPPORT
+  CONCIERGE
+  CREW
+  CAPTAIN
+  MARINA_MANAGER
+  CUSTOMER
+  YACHT_OWNER
+}
+
+enum BookingStatus {
+  INQUIRY
+  QUOTE
+  PENDING
+  RESERVED
+  DEPOSIT_PAID
+  CONFIRMED
+  CONTRACT_PENDING
+  CONTRACT_SIGNED
+  READY
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+enum YachtOperationalStatus {
+  ACTIVE
+  AVAILABLE
+  RESERVED
+  BOOKED
+  PREPARING
+  READY
+  IN_CHARTER
+  POST_CHARTER
+  MAINTENANCE
+  OUT_OF_SERVICE
+  ARCHIVED
+}
+
+enum CrewRole {
+  CAPTAIN
+  FIRST_OFFICER
+  ENGINEER
+  CHEF
+  STEWARD
+  DECKHAND
+  OTHER
+}
+
+enum CrewStatus {
+  AVAILABLE
+  ASSIGNED
+  ON_CHARTER
+  UNAVAILABLE
+  ON_LEAVE
+  INACTIVE
+}
+
+enum CertStatus {
+  VALID
+  EXPIRING_SOON
+  EXPIRED
+}
+
+enum MaintenanceStatus {
+  REPORTED
+  PLANNED
+  SCHEDULED
+  IN_PROGRESS
+  WAITING_PARTS
+  COMPLETED
+  CANCELLED
+}
+
+enum MaintenancePriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum InspectionType {
+  PRE_CHARTER
+  POST_CHARTER
+  MAINTENANCE
+  GENERAL
+}
+
+enum InspectionStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  PASSED
+  FAILED
+  CANCELLED
+}
+
+enum InspectionItemResult {
+  PASS
+  FAIL
+  NOT_CHECKED
+  NOT_APPLICABLE
+}
+
+enum ChecklistStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+enum ChecklistItemResult {
+  PENDING
+  COMPLETED
+  FAILED
+  NOT_APPLICABLE
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  CAPTURED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum Currency {
+  USD
+  EUR
+  AED
+  GBP
+  INR
+  AUD
+  SGD
+  JPY
+  CAD
+}
+
+enum BusinessType {
+  YACHT_CHARTER
+  YACHT_OPERATOR
+  YACHT_BROKER
+  MARINA
+  YACHT_CLUB
+  LUXURY_EVENT
+  OTHER
+}
+
+model Organization {
+  id              String   @id @default(uuid())
+  name            String
+  slug            String   @unique
+  legalName       String?  @map("legal_name")
+  taxId           String?  @map("tax_id")
+  countryCode     String   @map("country_code")
+  defaultCurrency Currency @default(USD) @map("default_currency")
+  timezone        String   @default("UTC")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  locations          Location[]
+  users              User[]
+  yachts             Yacht[]
+  customers          Customer[]
+  bookings           Booking[]
+  payments           Payment[]
+  invoices           Invoice[]
+  notifications      Notification[]
+  auditLogs          AuditLog[]
+  crewMembers        CrewMember[]
+  vendors            Vendor[]
+  maintenanceRecords MaintenanceRecord[]
+  checklistTemplates ChecklistTemplate[]
+  checklistInstances ChecklistInstance[]
+  inspections        Inspection[]
+  operationalTasks   OperationalTask[]
+  devices            Device[]
+  telemetryRecords   TelemetryRecord[]
+  alertRules         AlertRule[]
+  alerts             Alert[]
+  geofences          Geofence[]
+  geofenceEvents     GeofenceEvent[]
+  deviceEvents       DeviceEvent[]
+  marinas            Marina[]
+  marinaVessels      MarinaVessel[]
+  berthReservations  BerthReservation[]
+  marinaServices     MarinaService[]
+  marinaContracts    MarinaContract[]
+  clubMembers        ClubMember[]
+  membershipPlans    MembershipPlan[]
+  clubEvents         ClubEvent[]
+  clubServices       ClubService[]
+  leads              Lead[]
+  followUpTasks      FollowUpTask[]
+  automationWorkflows AutomationWorkflow[]
+  communicationTemplates CommunicationTemplate[]
+  campaigns          Campaign[]
+  customerFeedbacks  CustomerFeedback[]
+  aiUsageLogs        AiUsageLog[]
+  conciergeRequests  ConciergeRequest[]
+  serviceRequests    ServiceRequest[]
+  supportTickets     SupportTicket[]
+  customerMessages   CustomerMessage[]
+  publicReviews      PublicReview[]
+  branches           Branch[]
+  taxRules           TaxRule[]
+  subscription       Subscription?
+  privacyRequests    PrivacyRequest[]
+  analyticsMetrics   AnalyticsMetric[]
+  kpiDefinitions     KpiDefinition[]
+  forecastRuns       ForecastRun[]
+  executiveAlerts    ExecutiveAlert[]
+  savedReports       SavedReport[]
+  aiRecommendations  AiRecommendation[]
+
+  @@map("organizations")
+}
+
+model Location {
+  id             String       @id @default(uuid())
+  organizationId String       @map("organization_id")
+  name           String
+  addressLine1   String       @map("address_line1")
+  addressLine2   String?      @map("address_line2")
+  city           String
+  stateProvince  String?      @map("state_province")
+  country        String
+  postalCode     String?      @map("postal_code")
+  latitude       Decimal?     @db.Decimal(10, 8)
+  longitude      Decimal?     @db.Decimal(11, 8)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yachts         Yacht[]
+
+  @@map("locations")
+}
+
+model User {
+  id             String        @id @default(uuid())
+  organizationId String?       @map("organization_id")
+  email          String        @unique
+  passwordHash   String        @map("password_hash")
+  firstName      String        @map("first_name")
+  lastName       String        @map("last_name")
+  phoneNumber    String?       @map("phone_number")
+  isActive       Boolean       @default(true) @map("is_active")
+  emailVerified  Boolean       @default(false) @map("email_verified")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+
+  userRoles            UserRoleAssignment[]
+  statusHistoryChanges BookingStatusHistory[]
+  auditLogs            AuditLog[]
+  customers            Customer[]
+  crewMembers          CrewMember[]
+  reportedMaintenance  MaintenanceRecord[]
+  conductedInspections Inspection[]
+  assignedTasks        OperationalTask[]
+  clubMembers          ClubMember[]
+  assignedLeads        Lead[]
+  assignedFollowUps    FollowUpTask[]
+  aiUsageLogs          AiUsageLog[]
+
+  @@map("users")
+}
+
+model Role {
+  id             String  @id @default(uuid())
+  organizationId String? @map("organization_id")
+  name           String
+  code           String
+  description    String?
+  isSystemRole   Boolean @default(false) @map("is_system_role")
+
+  userRoles       UserRoleAssignment[]
+  rolePermissions RolePermissionAssignment[]
+
+  @@unique([organizationId, code])
+  @@map("roles")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  description String?
+  category    String
+  roles       RolePermissionAssignment[]
+
+  @@map("permissions")
+}
+
+model UserRoleAssignment {
+  userId String @map("user_id")
+  roleId String @map("role_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+model RolePermissionAssignment {
+  roleId       String     @map("role_id")
+  permissionId String     @map("permission_id")
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model Yacht {
+  id                 String                 @id @default(uuid())
+  organizationId     String                 @map("organization_id")
+  name               String
+  registrationNumber String?                @map("registration_number")
+  make               String?
+  model              String?
+  yearBuilt          Int?                   @map("year_built")
+  lengthFt           Decimal?               @map("length_ft") @db.Decimal(6, 2)
+  capacityPassengers Int                    @map("capacity_passengers")
+  cabins             Int                    @default(0)
+  bathrooms          Int                    @default(0)
+  homePortId         String?                @map("home_port_id")
+  hourlyRate         Decimal                @map("hourly_rate") @db.Decimal(14, 2)
+  dailyRate          Decimal                @map("daily_rate") @db.Decimal(14, 2)
+  currency           Currency               @default(USD)
+  isActive           Boolean                @default(true) @map("is_active")
+  operationalStatus  YachtOperationalStatus @default(AVAILABLE) @map("operational_status")
+  createdAt          DateTime               @default(now()) @map("created_at")
+  updatedAt          DateTime               @updatedAt @map("updated_at")
+
+  organization       Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  homePort           Location?           @relation(fields: [homePortId], references: [id])
+  images             YachtImage[]
+  availability       YachtAvailability[]
+  bookings           Booking[]
+  maintenanceRecords MaintenanceRecord[]
+  checklistInstances ChecklistInstance[]
+  inspections        Inspection[]
+  operationalTasks   OperationalTask[]
+  devices            Device[]
+  telemetryRecords   TelemetryRecord[]
+  alerts             Alert[]
+  geofenceEvents     GeofenceEvent[]
+  marinaVessels      MarinaVessel[]
+
+  @@map("yachts")
+}
+
+model YachtImage {
+  id           String   @id @default(uuid())
+  yachtId      String   @map("yacht_id")
+  storagePath  String   @map("storage_path")
+  isPrimary    Boolean  @default(false) @map("is_primary")
+  displayOrder Int      @default(0) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  yacht        Yacht    @relation(fields: [yachtId], references: [id], onDelete: Cascade)
+
+  @@map("yacht_images")
+}
+
+model YachtAvailability {
+  id        String   @id @default(uuid())
+  yachtId   String   @map("yacht_id")
+  startTime DateTime @map("start_time")
+  endTime   DateTime @map("end_time")
+  isBlocked Boolean  @default(true) @map("is_blocked")
+  reason    String?
+  createdAt DateTime @default(now()) @map("created_at")
+  yacht     Yacht    @relation(fields: [yachtId], references: [id], onDelete: Cascade)
+
+  @@map("yacht_availability")
+}
+
+model Customer {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  userId         String?  @map("user_id")
+  firstName      String   @map("first_name")
+  lastName       String   @map("last_name")
+  email          String
+  phoneNumber    String?  @map("phone_number")
+  nationality    String?
+  passportNumber String?  @map("passport_number")
+  vipStatus      Boolean  @default(false) @map("vip_status")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  bookings     Booking[]
+  marinaVessels      MarinaVessel[]
+  berthReservations  BerthReservation[]
+  marinaContracts    MarinaContract[]
+  clubMembers        ClubMember[]
+  leadActivities     LeadActivity[]
+  followUpTasks      FollowUpTask[]
+  preferences        CustomerPreference[]
+  feedbacks          CustomerFeedback[]
+  profile            CustomerProfile?
+  conciergeRequests  ConciergeRequest[]
+  serviceRequests    ServiceRequest[]
+  supportTickets     SupportTicket[]
+  eventWaitlists     EventWaitlist[]
+  customerMessages   CustomerMessage[]
+  publicReviews      PublicReview[]
+
+  @@map("customers")
+}
+
+model Booking {
+  id               String        @id @default(uuid())
+  organizationId   String        @map("organization_id")
+  bookingReference String        @unique @map("booking_reference")
+  yachtId          String        @map("yacht_id")
+  customerId       String        @map("customer_id")
+  status           BookingStatus @default(INQUIRY)
+  startTime        DateTime      @map("start_time")
+  endTime          DateTime      @map("end_time")
+  passengerCount   Int           @map("passenger_count")
+  subtotalAmount   Decimal       @map("subtotal_amount") @db.Decimal(14, 2)
+  taxAmount        Decimal       @default(0.00) @map("tax_amount") @db.Decimal(14, 2)
+  discountAmount   Decimal       @default(0.00) @map("discount_amount") @db.Decimal(14, 2)
+  totalAmount      Decimal       @map("total_amount") @db.Decimal(14, 2)
+  currency         Currency      @default(USD)
+  specialRequests  String?       @map("special_requests")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+
+  organization       Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yacht              Yacht               @relation(fields: [yachtId], references: [id])
+  customer           Customer            @relation(fields: [customerId], references: [id])
+  addons             BookingAddon[]
+  statusLog          BookingStatusHistory[]
+  payments           Payment[]
+  invoices           Invoice[]
+  documents          Document[]
+  crewAssignments    CrewAssignment[]
+  checklistInstances ChecklistInstance[]
+  inspections        Inspection[]
+  operationalTasks   OperationalTask[]
+  berthReservations  BerthReservation[]
+
+  @@map("bookings")
+}
+
+model BookingAddon {
+  id          String   @id @default(uuid())
+  bookingId   String   @map("booking_id")
+  name        String
+  category    String
+  unitPrice   Decimal  @map("unit_price") @db.Decimal(14, 2)
+  quantity    Int      @default(1)
+  totalAmount Decimal  @map("total_amount") @db.Decimal(14, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@map("booking_addons")
+}
+
+model BookingStatusHistory {
+  id         String         @id @default(uuid())
+  bookingId  String         @map("booking_id")
+  fromStatus BookingStatus? @map("from_status")
+  toStatus   BookingStatus  @map("to_status")
+  changedBy  String?        @map("changed_by")
+  notes      String?
+  createdAt  DateTime       @default(now()) @map("created_at")
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [changedBy], references: [id])
+
+  @@map("booking_status_history")
+}
+
+model Payment {
+  id                    String        @id @default(uuid())
+  organizationId        String        @map("organization_id")
+  bookingId             String        @map("booking_id")
+  paymentReference      String        @unique @map("payment_reference")
+  provider              String        @default("STRIPE")
+  providerTransactionId String?       @map("provider_transaction_id")
+  amount                Decimal       @db.Decimal(14, 2)
+  currency              Currency      @default(USD)
+  status                PaymentStatus @default(PENDING)
+  paymentMethod         String?       @map("payment_method")
+  createdAt             DateTime      @default(now()) @map("created_at")
+  updatedAt             DateTime      @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  booking      Booking      @relation(fields: [bookingId], references: [id])
+
+  @@map("payments")
+}
+
+model Invoice {
+  id             String        @id @default(uuid())
+  organizationId String        @map("organization_id")
+  bookingId      String        @map("booking_id")
+  invoiceNumber  String        @unique @map("invoice_number")
+  subtotalAmount Decimal       @map("subtotal_amount") @db.Decimal(14, 2)
+  taxAmount      Decimal       @map("tax_amount") @db.Decimal(14, 2)
+  totalAmount    Decimal       @map("total_amount") @db.Decimal(14, 2)
+  paidAmount     Decimal       @default(0.00) @map("paid_amount") @db.Decimal(14, 2)
+  currency       Currency      @default(USD)
+  status         InvoiceStatus @default(ISSUED)
+  dueDate        DateTime      @map("due_date")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  booking      Booking      @relation(fields: [bookingId], references: [id])
+
+  @@map("invoices")
+}
+
+model Document {
+  id           String   @id @default(uuid())
+  bookingId    String   @map("booking_id")
+  name         String
+  documentType String   @map("document_type")
+  storagePath  String   @map("storage_path")
+  isSigned     Boolean  @default(false) @map("is_signed")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
+
+// -------------------------------------------------------------
+// PHASE 2 OPERATIONAL MANAGEMENT MODELS
+// -------------------------------------------------------------
+
+model CrewMember {
+  id             String     @id @default(uuid())
+  organizationId String     @map("organization_id")
+  userId         String?    @map("user_id")
+  firstName      String     @map("first_name")
+  lastName       String     @map("last_name")
+  email          String
+  phone          String?
+  role           CrewRole   @default(DECKHAND)
+  customRole     String?    @map("custom_role")
+  nationality    String?
+  status         CrewStatus @default(AVAILABLE)
+  hireDate       DateTime?  @map("hire_date")
+  isActive       Boolean    @default(true) @map("is_active")
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  availability   CrewAvailability[]
+  assignments    CrewAssignment[]
+  certifications CrewCertification[]
+  licenses       CrewLicense[]
+  documents      CrewDocument[]
+
+  @@map("crew_members")
+}
+
+model CrewAvailability {
+  id           String     @id @default(uuid())
+  crewMemberId String     @map("crew_member_id")
+  startTime    DateTime   @map("start_time")
+  endTime      DateTime   @map("end_time")
+  isBlocked    Boolean    @default(true) @map("is_blocked")
+  reason       String?
+  createdAt    DateTime   @default(now()) @map("created_at")
+  crewMember   CrewMember @relation(fields: [crewMemberId], references: [id], onDelete: Cascade)
+
+  @@map("crew_availability")
+}
+
+model CrewAssignment {
+  id           String     @id @default(uuid())
+  bookingId    String     @map("booking_id")
+  crewMemberId String     @map("crew_member_id")
+  roleAssigned String     @map("role_assigned")
+  startTime    DateTime   @map("start_time")
+  endTime      DateTime   @map("end_time")
+  status       String     @default("CONFIRMED")
+  notes        String?
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  booking      Booking    @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  crewMember   CrewMember @relation(fields: [crewMemberId], references: [id], onDelete: Cascade)
+
+  @@map("crew_assignments")
+}
+
+model CrewCertification {
+  id               String     @id @default(uuid())
+  crewMemberId     String     @map("crew_member_id")
+  name             String
+  issuingAuthority String?    @map("issuing_authority")
+  certificateNumber String?   @map("certificate_number")
+  issueDate        DateTime?  @map("issue_date")
+  expiryDate       DateTime?  @map("expiry_date")
+  documentUrl      String?    @map("document_url")
+  status           CertStatus @default(VALID)
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+  crewMember       CrewMember @relation(fields: [crewMemberId], references: [id], onDelete: Cascade)
+
+  @@map("crew_certifications")
+}
+
+model CrewLicense {
+  id            String     @id @default(uuid())
+  crewMemberId  String     @map("crew_member_id")
+  name          String
+  licenseNumber String?    @map("license_number")
+  issuingAuthority String? @map("issuing_authority")
+  issueDate     DateTime?  @map("issue_date")
+  expiryDate    DateTime?  @map("expiry_date")
+  documentUrl   String?    @map("document_url")
+  status        CertStatus @default(VALID)
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+  crewMember    CrewMember @relation(fields: [crewMemberId], references: [id], onDelete: Cascade)
+
+  @@map("crew_licenses")
+}
+
+model CrewDocument {
+  id           String     @id @default(uuid())
+  crewMemberId String     @map("crew_member_id")
+  name         String
+  documentType String     @map("document_type")
+  storagePath  String     @map("storage_path")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  crewMember   CrewMember @relation(fields: [crewMemberId], references: [id], onDelete: Cascade)
+
+  @@map("crew_documents")
+}
+
+model Vendor {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  name           String
+  category       String   @default("MAINTENANCE")
+  contactName    String?  @map("contact_name")
+  email          String?
+  phone          String?
+  location       String?
+  services       String?
+  status         String   @default("ACTIVE")
+  notes          String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  maintenance  MaintenanceRecord[]
+
+  @@map("vendors")
+}
+
+model MaintenanceRecord {
+  id                 String              @id @default(uuid())
+  organizationId     String              @map("organization_id")
+  yachtId            String              @map("yacht_id")
+  vendorId           String?             @map("vendor_id")
+  inspectionId       String?             @map("inspection_id")
+  title              String
+  description        String
+  priority           MaintenancePriority @default(MEDIUM)
+  status             MaintenanceStatus   @default(REPORTED)
+  isBlocking         Boolean             @default(false) @map("is_blocking")
+  reportedById       String?             @map("reported_by_id")
+  assignedVendorName String?             @map("assigned_vendor_name")
+  dueDate            DateTime?           @map("due_date")
+  completedDate      DateTime?           @map("completed_date")
+  estimatedCost      Decimal?            @map("estimated_cost") @db.Decimal(14, 2)
+  actualCost         Decimal?            @map("actual_cost") @db.Decimal(14, 2)
+  currency           Currency            @default(USD)
+  notes              String?
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yacht        Yacht        @relation(fields: [yachtId], references: [id])
+  vendor       Vendor?      @relation(fields: [vendorId], references: [id])
+  inspection   Inspection?  @relation(fields: [inspectionId], references: [id])
+  reportedBy   User?        @relation(fields: [reportedById], references: [id])
+
+  @@map("maintenance_records")
+}
+
+model ChecklistTemplate {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  name           String
+  description    String?
+  type           String   @default("PRE_CHARTER")
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  items        ChecklistTemplateItem[]
+  instances    ChecklistInstance[]
+
+  @@map("checklist_templates")
+}
+
+model ChecklistTemplateItem {
+  id          String            @id @default(uuid())
+  templateId  String            @map("template_id")
+  title       String
+  description String?
+  isRequired  Boolean           @default(true) @map("is_required")
+  displayOrder Int              @default(0) @map("display_order")
+  template    ChecklistTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@map("checklist_template_items")
+}
+
+model ChecklistInstance {
+  id             String          @id @default(uuid())
+  organizationId String          @map("organization_id")
+  bookingId      String?         @map("booking_id")
+  yachtId        String          @map("yacht_id")
+  templateId     String          @map("template_id")
+  assignedUserId String?         @map("assigned_user_id")
+  status         ChecklistStatus @default(PENDING)
+  completedAt    DateTime?       @map("completed_at")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  organization Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  booking      Booking?                @relation(fields: [bookingId], references: [id])
+  yacht        Yacht                   @relation(fields: [yachtId], references: [id])
+  template     ChecklistTemplate       @relation(fields: [templateId], references: [id])
+  items        ChecklistInstanceItem[]
+
+  @@map("checklist_instances")
+}
+
+model ChecklistInstanceItem {
+  id          String              @id @default(uuid())
+  instanceId  String              @map("instance_id")
+  title       String
+  result      ChecklistItemResult @default(PENDING)
+  notes       String?
+  completedBy String?             @map("completed_by")
+  completedAt DateTime?           @map("completed_at")
+  instance    ChecklistInstance   @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+
+  @@map("checklist_instance_items")
+}
+
+model Inspection {
+  id               String           @id @default(uuid())
+  organizationId   String           @map("organization_id")
+  yachtId          String           @map("yacht_id")
+  bookingId        String?          @map("booking_id")
+  inspectorUserId  String?          @map("inspector_user_id")
+  type             InspectionType   @default(PRE_CHARTER)
+  status           InspectionStatus @default(PENDING)
+  notes            String?
+  inspectionDate   DateTime         @default(now()) @map("inspection_date")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  organization       Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yacht              Yacht               @relation(fields: [yachtId], references: [id])
+  booking            Booking?            @relation(fields: [bookingId], references: [id])
+  inspector          User?               @relation(fields: [inspectorUserId], references: [id])
+  items              InspectionItem[]
+  maintenanceRecords MaintenanceRecord[]
+
+  @@map("inspections")
+}
+
+model InspectionItem {
+  id                 String               @id @default(uuid())
+  inspectionId       String               @map("inspection_id")
+  categoryName       String               @map("category_name")
+  itemName           String               @map("item_name")
+  result             InspectionItemResult @default(NOT_CHECKED)
+  notes              String?
+  maintenanceCreated Boolean              @default(false) @map("maintenance_created")
+  inspection         Inspection           @relation(fields: [inspectionId], references: [id], onDelete: Cascade)
+
+  @@map("inspection_items")
+}
+
+model OperationalTask {
+  id             String              @id @default(uuid())
+  organizationId String              @map("organization_id")
+  yachtId        String?             @map("yacht_id")
+  bookingId      String?             @map("booking_id")
+  assignedUserId String?             @map("assigned_user_id")
+  title          String
+  description    String?
+  priority       TaskPriority        @default(MEDIUM)
+  status         TaskStatus          @default(TODO)
+  dueDate        DateTime?           @map("due_date")
+  completedAt    DateTime?           @map("completed_at")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yacht        Yacht?       @relation(fields: [yachtId], references: [id])
+  booking      Booking?     @relation(fields: [bookingId], references: [id])
+  assignedUser User?        @relation(fields: [assignedUserId], references: [id])
+
+  @@map("operational_tasks")
+}
+
+model Notification {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  title          String
+  message        String
+  channel        String   @default("IN_APP")
+  isRead         Boolean  @default(false) @map("is_read")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id             String   @id @default(uuid())
+  organizationId String?  @map("organization_id")
+  actorUserId    String?  @map("actor_user_id")
+  action         String
+  entityName     String   @map("entity_name")
+  entityId       String   @map("entity_id")
+  previousState  Json?    @map("previous_state")
+  newState       Json?    @map("new_state")
+  ipAddress      String?  @map("ip_address")
+  userAgent      String?  @map("user_agent")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  actor        User?         @relation(fields: [actorUserId], references: [id])
+
+  @@map("audit_logs")
+}
+
+// ==========================================
+// PHASE 3 — SMART FLEET & IoT CONNECTED VESSELS
+// ==========================================
+
+enum DeviceType {
+  GPS
+  ENGINE
+  FUEL
+  BATTERY
+  BILGE
+  TEMPERATURE
+  WATER_LEVEL
+  OTHER
+}
+
+enum DeviceStatus {
+  ACTIVE
+  INACTIVE
+  OFFLINE
+  ERROR
+  MAINTENANCE
+}
+
+enum MetricType {
+  SPEED
+  HEADING
+  LATITUDE
+  LONGITUDE
+  FUEL_LEVEL
+  BATTERY_VOLTAGE
+  BATTERY_CHARGE
+  ENGINE_RPM
+  ENGINE_TEMP
+  ENGINE_HOURS
+  BILGE_STATUS
+  TEMPERATURE
+  WATER_LEVEL
+  CUSTOM
+}
+
+enum TelemetryQuality {
+  GOOD
+  SUSPECT
+  INVALID
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+enum AlertCategory {
+  DEVICE_OFFLINE
+  HIGH_SPEED
+  LOW_BATTERY
+  LOW_FUEL
+  HIGH_ENGINE_TEMPERATURE
+  BILGE_ALERT
+  GEOFENCE_EXIT
+  GEOFENCE_ENTRY
+  ABNORMAL_READING
+  OTHER
+}
+
+enum AlertStatus {
+  OPEN
+  ACKNOWLEDGED
+  RESOLVED
+  DISMISSED
+}
+
+enum GeofenceShape {
+  CIRCLE
+  POLYGON
+}
+
+enum GeofenceEventType {
+  ENTRY
+  EXIT
+}
+
+model Device {
+  id              String       @id @default(uuid())
+  organizationId  String       @map("organization_id")
+  yachtId         String?      @map("yacht_id")
+  deviceName      String       @map("device_name")
+  deviceType      DeviceType   @default(GPS) @map("device_type")
+  manufacturer    String?
+  model           String?
+  serialNumber    String?      @map("serial_number")
+  firmwareVersion String?      @map("firmware_version")
+  status          DeviceStatus @default(ACTIVE)
+  lastSeenAt      DateTime?    @map("last_seen_at")
+  installedAt     DateTime?    @map("installed_at")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  organization Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yacht        Yacht?              @relation(fields: [yachtId], references: [id])
+  credentials  DeviceCredential?
+  telemetry    TelemetryRecord[]
+  alerts       Alert[]
+  events       DeviceEvent[]
+
+  @@map("devices")
+}
+
+model DeviceCredential {
+  id          String   @id @default(uuid())
+  deviceId    String   @unique @map("device_id")
+  tokenHash   String   @map("token_hash")
+  secretMask  String   @map("secret_mask")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@map("device_credentials")
+}
+
+model TelemetryRecord {
+  id             String           @id @default(uuid())
+  organizationId String           @map("organization_id")
+  yachtId        String           @map("yacht_id")
+  deviceId       String           @map("device_id")
+  timestamp      DateTime         @default(now())
+  metricType     MetricType       @map("metric_type")
+  value          Float
+  unit           String           @default("unit")
+  quality        TelemetryQuality @default(GOOD)
+  source         String           @default("simulator")
+  eventId        String?          @map("event_id")
+  createdAt      DateTime         @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yacht        Yacht        @relation(fields: [yachtId], references: [id], onDelete: Cascade)
+  device       Device       @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, yachtId, timestamp])
+  @@index([deviceId, timestamp])
+  @@index([metricType, timestamp])
+  @@map("telemetry_records")
+}
+
+model TelemetryAggregate {
+  id             String     @id @default(uuid())
+  organizationId String     @map("organization_id")
+  yachtId        String     @map("yacht_id")
+  metricType     MetricType @map("metric_type")
+  timeBucket     DateTime   @map("time_bucket")
+  avgValue       Float      @map("avg_value")
+  minValue       Float      @map("min_value")
+  maxValue       Float      @map("max_value")
+  sampleCount    Int        @map("sample_count")
+
+  @@unique([yachtId, metricType, timeBucket])
+  @@map("telemetry_aggregates")
+}
+
+model AlertRule {
+  id              String        @id @default(uuid())
+  organizationId  String        @map("organization_id")
+  yachtId         String?       @map("yacht_id")
+  deviceId        String?       @map("device_id")
+  metricType      MetricType    @map("metric_type")
+  operator        String        @default("<")
+  threshold       Float
+  severity        AlertSeverity @default(WARNING)
+  category        AlertCategory @default(OTHER)
+  isEnabled       Boolean       @default(true) @map("is_enabled")
+  cooldownMinutes Int           @default(15) @map("cooldown_minutes")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  alerts       Alert[]
+
+  @@map("alert_rules")
+}
+
+model Alert {
+  id               String        @id @default(uuid())
+  organizationId   String        @map("organization_id")
+  yachtId          String        @map("yacht_id")
+  deviceId         String?       @map("device_id")
+  ruleId           String?       @map("rule_id")
+  category         AlertCategory @default(OTHER)
+  severity         AlertSeverity @default(WARNING)
+  status           AlertStatus   @default(OPEN)
+  title            String
+  message          String
+  metricType       MetricType?   @map("metric_type")
+  metricValue      Float?        @map("metric_value")
+  threshold        Float?
+  triggerCount     Int           @default(1) @map("trigger_count")
+  lastTriggeredAt  DateTime      @default(now()) @map("last_triggered_at")
+  acknowledgedById String?       @map("acknowledged_by_id")
+  acknowledgedAt   DateTime?     @map("acknowledged_at")
+  resolvedById     String?       @map("resolved_by_id")
+  resolvedAt       DateTime?     @map("resolved_at")
+  notes            String?
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yacht        Yacht        @relation(fields: [yachtId], references: [id], onDelete: Cascade)
+  device       Device?      @relation(fields: [deviceId], references: [id])
+  rule         AlertRule?   @relation(fields: [ruleId], references: [id])
+
+  @@map("alerts")
+}
+
+model Geofence {
+  id             String        @id @default(uuid())
+  organizationId String        @map("organization_id")
+  yachtId        String?       @map("yacht_id")
+  name           String
+  description    String?
+  shape          GeofenceShape @default(CIRCLE)
+  centerLat      Float?        @map("center_lat")
+  centerLng      Float?        @map("center_lng")
+  radiusMeters   Float?        @map("radius_meters")
+  polygonCoords  Json?         @map("polygon_coords")
+  isActive       Boolean       @default(true) @map("is_active")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  events       GeofenceEvent[]
+
+  @@map("geofences")
+}
+
+model GeofenceEvent {
+  id             String            @id @default(uuid())
+  organizationId String            @map("organization_id")
+  yachtId        String            @map("yacht_id")
+  deviceId       String?           @map("device_id")
+  geofenceId     String            @map("geofence_id")
+  eventType      GeofenceEventType @map("event_type")
+  latitude       Float
+  longitude      Float
+  timestamp      DateTime          @default(now())
+  createdAt      DateTime          @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yacht        Yacht        @relation(fields: [yachtId], references: [id], onDelete: Cascade)
+  geofence     Geofence     @relation(fields: [geofenceId], references: [id], onDelete: Cascade)
+
+  @@map("geofence_events")
+}
+
+model DeviceEvent {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  deviceId       String   @map("device_id")
+  eventType      String   @map("event_type")
+  payload        Json?
+  timestamp      DateTime @default(now())
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  device       Device       @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@map("device_events")
+}
+
+// ==========================================
+// PHASE 4 — MARINA & YACHT CLUB MANAGEMENT
+// ==========================================
+
+enum MarinaStatus {
+  ACTIVE
+  INACTIVE
+  UNDER_MAINTENANCE
+  CLOSED
+}
+
+enum DockStatus {
+  ACTIVE
+  CLOSED
+  MAINTENANCE
+}
+
+enum BerthStatus {
+  AVAILABLE
+  RESERVED
+  OCCUPIED
+  MAINTENANCE
+  OUT_OF_SERVICE
+}
+
+enum BerthReservationStatus {
+  INQUIRY
+  PENDING
+  RESERVED
+  CONFIRMED
+  CHECK_IN
+  OCCUPIED
+  CHECK_OUT
+  COMPLETED
+  CANCELLED
+}
+
+enum ContractType {
+  SHORT_TERM
+  LONG_TERM
+  SEASONAL
+}
+
+enum ContractStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum ClubMemberStatus {
+  ACTIVE
+  PENDING
+  SUSPENDED
+  EXPIRED
+  CANCELLED
+}
+
+enum MembershipBillingCycle {
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+enum ClubEventStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+model Marina {
+  id             String       @id @default(uuid())
+  organizationId String       @map("organization_id")
+  name           String
+  description    String?
+  address        String
+  country        String
+  city           String
+  postalCode     String?      @map("postal_code")
+  latitude       Float?
+  longitude      Float?
+  phone          String?
+  email          String?
+  website        String?
+  operatingHours String?      @map("operating_hours")
+  timezone       String       @default("UTC")
+  currency       Currency     @default(USD)
+  status         MarinaStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  docks        Dock[]
+  reservations BerthReservation[]
+  contracts    MarinaContract[]
+
+  @@map("marinas")
+}
+
+model Dock {
+  id             String     @id @default(uuid())
+  marinaId       String     @map("marina_id")
+  name           String
+  description    String?
+  location       String?
+  numberOfBerths Int        @default(0) @map("number_of_berths")
+  status         DockStatus @default(ACTIVE)
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+
+  marina Marina  @relation(fields: [marinaId], references: [id], onDelete: Cascade)
+  berths Berth[]
+
+  @@map("docks")
+}
+
+model Berth {
+  id             String      @id @default(uuid())
+  dockId         String      @map("dock_id")
+  berthNumber    String      @map("berth_number")
+  maxLengthFt    Float       @map("max_length_ft")
+  maxBeamFt      Float       @map("max_beam_ft")
+  maxDraftFt     Float       @map("max_draft_ft")
+  powerAvailable Boolean     @default(true) @map("power_available")
+  waterAvailable Boolean     @default(true) @map("water_available")
+  sewageService  Boolean     @default(false) @map("sewage_service")
+  fuelService    Boolean     @default(false) @map("fuel_service")
+  status         BerthStatus @default(AVAILABLE)
+  pricePerNight  Float       @map("price_per_night")
+  currency       Currency    @default(USD)
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+
+  dock         Dock               @relation(fields: [dockId], references: [id], onDelete: Cascade)
+  reservations BerthReservation[]
+  contracts    MarinaContract[]
+
+  @@map("berths")
+}
+
+model MarinaVessel {
+  id                    String    @id @default(uuid())
+  organizationId        String    @map("organization_id")
+  yachtId               String?   @map("yacht_id")
+  customerId            String?   @map("customer_id")
+  vesselName            String    @map("vessel_name")
+  registrationNumber    String?   @map("registration_number")
+  type                  String?
+  lengthFt              Float     @map("length_ft")
+  beamFt                Float     @map("beam_ft")
+  draftFt               Float     @map("draft_ft")
+  homePort              String?   @map("home_port")
+  insurancePolicyNumber String?   @map("insurance_policy_number")
+  insuranceExpiry       DateTime? @map("insurance_expiry")
+  notes                 String?
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  yacht        Yacht?             @relation(fields: [yachtId], references: [id])
+  customer     Customer?          @relation(fields: [customerId], references: [id])
+  reservations BerthReservation[]
+  contracts    MarinaContract[]
+
+  @@map("marina_vessels")
+}
+
+model BerthReservation {
+  id             String                 @id @default(uuid())
+  organizationId String                 @map("organization_id")
+  marinaId       String                 @map("marina_id")
+  berthId        String                 @map("berth_id")
+  vesselId       String                 @map("vessel_id")
+  customerId     String                 @map("customer_id")
+  bookingId      String?                @map("booking_id")
+  checkInDate    DateTime               @map("check_in_date")
+  checkOutDate   DateTime               @map("check_out_date")
+  status         BerthReservationStatus @default(RESERVED)
+  totalAmount    Float                  @map("total_amount")
+  currency       Currency               @default(USD)
+  notes          String?
+  createdAt      DateTime               @default(now()) @map("created_at")
+  updatedAt      DateTime               @updatedAt @map("updated_at")
+
+  organization Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  marina       Marina                   @relation(fields: [marinaId], references: [id], onDelete: Cascade)
+  berth        Berth                    @relation(fields: [berthId], references: [id], onDelete: Cascade)
+  vessel       MarinaVessel             @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+  customer     Customer                 @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  booking      Booking?                 @relation(fields: [bookingId], references: [id])
+  services     ReservationService[]
+  checkins     MarinaCheckinCheckout[]
+
+  @@map("berth_reservations")
+}
+
+model MarinaService {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  name           String
+  category       String
+  pricingModel   String   @default("PER_NIGHT") @map("pricing_model")
+  unitPrice      Float    @map("unit_price")
+  currency       Currency @default(USD)
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  reservations ReservationService[]
+
+  @@map("marina_services")
+}
+
+model ReservationService {
+  id            String   @id @default(uuid())
+  reservationId String   @map("reservation_id")
+  serviceId     String   @map("service_id")
+  quantity      Int      @default(1)
+  totalPrice    Float    @map("total_price")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  reservation BerthReservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  service     MarinaService    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@map("reservation_services")
+}
+
+model MarinaContract {
+  id             String         @id @default(uuid())
+  organizationId String         @map("organization_id")
+  marinaId       String         @map("marina_id")
+  berthId        String         @map("berth_id")
+  customerId     String         @map("customer_id")
+  vesselId       String         @map("vessel_id")
+  contractNumber String         @unique @map("contract_number")
+  type           ContractType   @default(SHORT_TERM)
+  startDate      DateTime       @map("start_date")
+  endDate        DateTime       @map("end_date")
+  price          Float
+  currency       Currency       @default(USD)
+  status         ContractStatus @default(ACTIVE)
+  terms          String?
+  documentUrl    String?        @map("document_url")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  marina       Marina       @relation(fields: [marinaId], references: [id], onDelete: Cascade)
+  berth        Berth        @relation(fields: [berthId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  vessel       MarinaVessel @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+
+  @@map("marina_contracts")
+}
+
+model MarinaCheckinCheckout {
+  id              String   @id @default(uuid())
+  reservationId  String   @map("reservation_id")
+  actionType     String   @map("action_type") // CHECK_IN | CHECK_OUT
+  timestamp      DateTime @default(now())
+  conditionRating Int?     @map("condition_rating")
+  conditionNotes String?  @map("condition_notes")
+  staffUserId    String?  @map("staff_user_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  reservation BerthReservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+
+  @@map("marina_checkin_checkouts")
+}
+
+model ClubMember {
+  id               String           @id @default(uuid())
+  organizationId   String           @map("organization_id")
+  customerId       String           @map("customer_id")
+  userId           String?          @map("user_id")
+  membershipNumber String           @unique @map("membership_number")
+  planId           String           @map("plan_id")
+  status           ClubMemberStatus @default(ACTIVE)
+  joinDate         DateTime         @default(now()) @map("join_date")
+  expiryDate       DateTime?        @map("expiry_date")
+  notes            String?
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  organization Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  user         User?               @relation(fields: [userId], references: [id])
+  plan         MembershipPlan      @relation(fields: [planId], references: [id], onDelete: Cascade)
+  events       EventRegistration[]
+
+  @@map("club_members")
+}
+
+model MembershipPlan {
+  id             String                 @id @default(uuid())
+  organizationId String                 @map("organization_id")
+  name           String
+  description    String?
+  price          Float
+  billingCycle   MembershipBillingCycle @default(ANNUAL) @map("billing_cycle")
+  benefits       Json?
+  isActive       Boolean                @default(true) @map("is_active")
+  createdAt      DateTime               @default(now()) @map("created_at")
+  updatedAt      DateTime               @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  members      ClubMember[]
+
+  @@map("membership_plans")
+}
+
+model ClubEvent {
+  id              String          @id @default(uuid())
+  organizationId  String          @map("organization_id")
+  name            String
+  description     String?
+  eventDate       DateTime        @map("event_date")
+  startTime       String          @map("start_time")
+  endTime         String          @map("end_time")
+  location        String
+  capacity        Int             @default(50)
+  registeredCount Int             @default(0) @map("registered_count")
+  price           Float           @default(0)
+  status          ClubEventStatus @default(UPCOMING)
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  organization  Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  registrations EventRegistration[]
+  eventWaitlists EventWaitlist[]
+
+  @@map("club_events")
+}
+
+model EventRegistration {
+  id           String   @id @default(uuid())
+  eventId      String   @map("event_id")
+  memberId     String   @map("member_id")
+  status       String   @default("CONFIRMED")
+  registeredAt DateTime @default(now()) @map("registered_at")
+  notes        String?
+
+  event  ClubEvent  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  member ClubMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@map("event_registrations")
+}
+
+model ClubService {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  name           String
+  category       String
+  price          Float
+  description    String?
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("club_services")
+}
+
+// ===================================================
+// PHASE 5 — AI, CRM, AUTOMATION & REVENUE INTELLIGENCE
+// ===================================================
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  DEMO_SCHEDULED
+  PROPOSAL
+  NEGOTIATION
+  WON
+  CLOSED_WON
+  LOST
+  CLOSED_LOST
+  NURTURE
+}
+
+enum LeadSource {
+  WEBSITE
+  BOOKING_ENGINE
+  CONTACT_FORM
+  REFERRAL
+  ADVERTISEMENT
+  SOCIAL_MEDIA
+  EMAIL
+  PHONE
+  WHATSAPP
+  PARTNER
+  MANUAL
+  OTHER
+}
+
+enum ActivityType {
+  CALL
+  EMAIL
+  WHATSAPP
+  MEETING
+  NOTE
+  FOLLOW_UP
+  PROPOSAL
+  BOOKING
+  OTHER
+}
+
+enum FollowUpStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  OVERDUE
+}
+
+enum AutomationTrigger {
+  LEAD_CREATED
+  LEAD_UPDATED
+  BOOKING_CREATED
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  PAYMENT_PENDING
+  PAYMENT_RECEIVED
+  CHARTER_UPCOMING
+  CHARTER_COMPLETED
+  MAINTENANCE_COMPLETED
+  MEMBERSHIP_EXPIRING
+  RESERVATION_CREATED
+  CUSTOMER_INACTIVE
+}
+
+enum TemplateChannel {
+  EMAIL
+  WHATSAPP
+  NOTIFICATION
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+model Lead {
+  id                  String     @id @default(uuid())
+  organizationId      String     @map("organization_id")
+  name                String
+  firstName           String?    @map("first_name")
+  lastName            String?    @map("last_name")
+  email               String
+  phone               String?
+  company             String?
+  country             String?
+  source              LeadSource @default(WEBSITE)
+  interestedYachtId  String?    @map("interested_yacht_id")
+  interestedMarinaId String?    @map("interested_marina_id")
+  budget              Float?
+  preferredDates      String?    @map("preferred_dates")
+  status              LeadStatus @default(NEW)
+  score               Int        @default(50)
+  assignedUserId      String?    @map("assigned_user_id")
+  convertedCustomerId String?    @map("converted_customer_id")
+  convertedAt         DateTime?  @map("converted_at")
+  notes               String?
+  createdAt           DateTime   @default(now()) @map("created_at")
+  updatedAt           DateTime   @updatedAt @map("updated_at")
+
+  organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignedUser User?          @relation(fields: [assignedUserId], references: [id])
+  activities   LeadActivity[]
+  followUps    FollowUpTask[]
+
+  @@map("leads")
+}
+
+model LeadActivity {
+  id             String       @id @default(uuid())
+  organizationId String       @map("organization_id")
+  leadId         String?      @map("lead_id")
+  customerId     String?      @map("customer_id")
+  userId         String?      @map("user_id")
+  type           ActivityType @default(NOTE)
+  summary        String
+  notes          String?
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  lead     Lead?     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  customer Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("lead_activities")
+}
+
+model FollowUpTask {
+  id             String         @id @default(uuid())
+  organizationId String         @map("organization_id")
+  leadId         String?        @map("lead_id")
+  customerId     String?        @map("customer_id")
+  assignedUserId String?        @map("assigned_user_id")
+  dueDate        DateTime       @map("due_date")
+  priority       TaskPriority   @default(MEDIUM)
+  notes          String?
+  status         FollowUpStatus @default(PENDING)
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  lead         Lead?        @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  customer     Customer?    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  assignedUser User?        @relation(fields: [assignedUserId], references: [id])
+
+  @@map("follow_up_tasks")
+}
+
+model AutomationWorkflow {
+  id             String            @id @default(uuid())
+  organizationId String            @map("organization_id")
+  name           String
+  trigger        AutomationTrigger
+  conditions     Json?
+  actions        Json
+  isEnabled      Boolean           @default(true) @map("is_enabled")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  runs         AutomationRun[]
+
+  @@map("automation_workflows")
+}
+
+model AutomationRun {
+  id              String   @id @default(uuid())
+  organizationId  String   @map("organization_id")
+  workflowId      String   @map("workflow_id")
+  eventId         String   @map("event_id")
+  startedAt       DateTime @default(now()) @map("started_at")
+  completedAt     DateTime? @map("completed_at")
+  result          String   @default("SUCCESS")
+  actionsExecuted Int      @default(1) @map("actions_executed")
+  error           String?
+
+  workflow AutomationWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  @@unique([workflowId, eventId])
+  @@map("automation_runs")
+}
+
+model CommunicationTemplate {
+  id             String          @id @default(uuid())
+  organizationId String          @map("organization_id")
+  name           String
+  channel        TemplateChannel @default(EMAIL)
+  subject        String?
+  body           String
+  variables      Json?
+  status         String          @default("ACTIVE")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("communication_templates")
+}
+
+model CustomerPreference {
+  id            String   @id @default(uuid())
+  customerId    String   @unique @map("customer_id")
+  emailOptIn    Boolean  @default(true) @map("email_opt_in")
+  whatsappOptIn Boolean  @default(true) @map("whatsapp_opt_in")
+  smsOptIn      Boolean  @default(true) @map("sms_opt_in")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("customer_preferences")
+}
+
+model Campaign {
+  id                String         @id @default(uuid())
+  organizationId    String         @map("organization_id")
+  name              String
+  channel           String
+  startDate         DateTime       @map("start_date")
+  endDate           DateTime?      @map("end_date")
+  budget            Float?
+  targetSegment     String?        @map("target_segment")
+  status            CampaignStatus @default(ACTIVE)
+  utmSource         String?        @map("utm_source")
+  utmMedium         String?        @map("utm_medium")
+  utmCampaign       String?        @map("utm_campaign")
+  leadsCount        Int            @default(0) @map("leads_count")
+  bookingsCount     Int            @default(0) @map("bookings_count")
+  revenueGenerated  Float          @default(0) @map("revenue_generated")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("campaigns")
+}
+
+model CustomerFeedback {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  customerId     String   @map("customer_id")
+  bookingId      String?  @map("booking_id")
+  rating         Int
+  comment        String?
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("customer_feedbacks")
+}
+
+model AiUsageLog {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  userId         String?  @map("user_id")
+  feature        String
+  provider       String   @default("BuiltInSimulatedAI")
+  promptCategory String   @map("prompt_category")
+  outputSummary  String?  @map("output_summary")
+  tokensUsed     Int      @default(0) @map("tokens_used")
+  estimatedCost  Float    @default(0) @map("estimated_cost")
+  approvedStatus String   @default("APPROVED") @map("approved_status")
+  timestamp      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id])
+
+  @@map("ai_usage_logs")
+}
+
+// ==========================================================
+// PHASE 6 — CUSTOMER PORTAL, MOBILE EXPERIENCE & CONCIERGE
+// ==========================================================
+
+enum ConciergeRequestStatus {
+  REQUESTED
+  UNDER_REVIEW
+  PROPOSED
+  ACCEPTED
+  COMPLETED
+  CANCELLED
+}
+
+enum ServiceRequestStatus {
+  REQUESTED
+  UNDER_REVIEW
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum SupportTicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_FOR_CUSTOMER
+  RESOLVED
+  CLOSED
+}
+
+enum SupportTicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum WaitlistStatus {
+  WAITING
+  NOTIFIED
+  CONVERTED
+  CANCELLED
+}
+
+model CustomerProfile {
+  id                      String   @id @default(uuid())
+  customerId              String   @unique @map("customer_id")
+  profilePhoto            String?  @map("profile_photo")
+  preferredLanguage       String   @default("en") @map("preferred_language")
+  communicationPreferences Json?   @map("communication_preferences")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("customer_profiles")
+}
+
+model ConciergeRequest {
+  id              String                 @id @default(uuid())
+  organizationId  String                 @map("organization_id")
+  customerId      String                 @map("customer_id")
+  bookingId       String?                @map("booking_id")
+  category        String
+  description     String
+  preferredDate   DateTime?              @map("preferred_date")
+  budget          Float?
+  status          ConciergeRequestStatus @default(REQUESTED)
+  proposalDetails String?                @map("proposal_details")
+  createdAt       DateTime               @default(now()) @map("created_at")
+  updatedAt       DateTime               @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("concierge_requests")
+}
+
+model ServiceRequest {
+  id             String               @id @default(uuid())
+  organizationId String               @map("organization_id")
+  customerId     String               @map("customer_id")
+  bookingId      String?              @map("booking_id")
+  serviceId      String               @map("service_id")
+  serviceName    String               @map("service_name")
+  requestedDate  DateTime             @map("requested_date")
+  quantity       Int                  @default(1)
+  totalPrice     Float                @map("total_price")
+  status         ServiceRequestStatus @default(REQUESTED)
+  notes          String?
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("service_requests")
+}
+
+model SupportTicket {
+  id                  String                @id @default(uuid())
+  organizationId      String                @map("organization_id")
+  customerId          String                @map("customer_id")
+  bookingId           String?               @map("booking_id")
+  subject             String
+  category            String
+  description         String
+  priority            SupportTicketPriority @default(MEDIUM)
+  status              SupportTicketStatus   @default(OPEN)
+  assignedStaffUserId String?               @map("assigned_staff_user_id")
+  createdAt           DateTime              @default(now()) @map("created_at")
+  updatedAt           DateTime              @updatedAt @map("updated_at")
+
+  organization Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  messages     SupportMessage[]
+
+  @@map("support_tickets")
+}
+
+model SupportMessage {
+  id         String   @id @default(uuid())
+  ticketId   String   @map("ticket_id")
+  senderType String   @default("CUSTOMER") @map("sender_type")
+  senderName String   @map("sender_name")
+  message    String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@map("support_messages")
+}
+
+model EventWaitlist {
+  id         String         @id @default(uuid())
+  eventId    String         @map("event_id")
+  customerId String         @map("customer_id")
+  status     WaitlistStatus @default(WAITING)
+  joinedAt   DateTime       @default(now()) @map("joined_at")
+  notifiedAt DateTime?      @map("notified_at")
+
+  event    ClubEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  customer Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, customerId])
+  @@map("event_waitlists")
+}
+
+model CustomerMessage {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  customerId     String   @map("customer_id")
+  bookingId      String?  @map("booking_id")
+  senderType     String   @default("CUSTOMER") @map("sender_type")
+  senderName     String   @map("sender_name")
+  message        String
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("customer_messages")
+}
+
+model PublicReview {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  customerId     String   @map("customer_id")
+  customerName   String   @map("customer_name")
+  yachtId        String?  @map("yacht_id")
+  marinaId       String?  @map("marina_id")
+  rating         Int
+  comment        String
+  isPublished    Boolean  @default(false) @map("is_published")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("public_reviews")
+}
+
+// =========================================================================
+// PHASE 7 — ENTERPRISE, COMPLIANCE, MULTI-COUNTRY & ADVANCED ADMINISTRATION
+// =========================================================================
+
+enum SubscriptionPlan {
+  STARTER
+  PROFESSIONAL
+  BUSINESS
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  SUSPENDED
+  CANCELLED
+}
+
+enum TaxCategory {
+  YACHT_CHARTER
+  BERTH_LEASE
+  UTILITY_SERVICE
+  CLUB_MEMBERSHIP
+  EVENT_TICKET
+}
+
+enum PrivacyRequestType {
+  ACCESS
+  CORRECTION
+  DELETION
+  EXPORT
+}
+
+enum PrivacyRequestStatus {
+  PENDING
+  REVIEWING
+  COMPLETED
+  REJECTED
+}
+
+enum SystemHealthStatus {
+  HEALTHY
+  WARNING
+  DEGRADED
+  DOWN
+}
+
+model Branch {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  name           String
+  code           String
+  country        String
+  region         String?
+  address        String
+  timezone       String   @default("UTC")
+  currency       Currency @default(USD)
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("branches")
+}
+
+model CountryConfig {
+  id                      String   @id @default(uuid())
+  countryCode             String   @unique @map("country_code")
+  countryName             String   @map("country_name")
+  defaultCurrency         Currency @default(USD) @map("default_currency")
+  currencySymbol          String   @default("$") @map("currency_symbol")
+  timezone                String   @default("UTC")
+  dateFormat              String   @default("YYYY-MM-DD") @map("date_format")
+  phoneCode               String   @default("+1") @map("phone_code")
+  addressFormat           String   @default("STANDARD") @map("address_format")
+  taxModel                String   @default("VAT") @map("tax_model")
+  invoiceRules            String   @default("STANDARD") @map("invoice_rules")
+  enabledPaymentProviders Json?    @map("enabled_payment_providers")
+  enabledLanguages        Json?    @map("enabled_languages")
+
+  @@map("country_configs")
+}
+
+model ExchangeRate {
+  id            String   @id @default(uuid())
+  baseCurrency  Currency @map("base_currency")
+  targetCurrency Currency @map("target_currency")
+  rate          Float
+  provider      String   @default("ExchangeRateProvider")
+  timestamp     DateTime @default(now())
+
+  @@unique([baseCurrency, targetCurrency, timestamp])
+  @@map("exchange_rates")
+}
+
+model TaxRule {
+  id             String      @id @default(uuid())
+  organizationId String      @map("organization_id")
+  countryCode    String      @map("country_code")
+  taxName        String      @map("tax_name")
+  taxRate        Float       @map("tax_rate")
+  category       TaxCategory @default(YACHT_CHARTER)
+  jurisdiction   String      @default("NATIONAL")
+  isActive       Boolean     @default(true) @map("is_active")
+  createdAt      DateTime    @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("tax_rules")
+}
+
+model FeatureFlag {
+  id        String  @id @default(uuid())
+  level     String  @default("ORGANIZATION")
+  targetId  String  @map("target_id")
+  flagKey   String  @map("flag_key")
+  isEnabled Boolean @default(true) @map("is_enabled")
+
+  @@unique([targetId, flagKey])
+  @@map("feature_flags")
+}
+
+model Subscription {
+  id                   String             @id @default(uuid())
+  organizationId       String             @unique @map("organization_id")
+  planName             SubscriptionPlan   @default(BUSINESS) @map("plan_name")
+  status               SubscriptionStatus @default(ACTIVE)
+  userLimit            Int                @default(15) @map("user_limit")
+  yachtLimit           Int                @default(10) @map("yacht_limit")
+  bookingLimit         Int                @default(500) @map("booking_limit")
+  aiRequestLimit       Int                @default(1000) @map("ai_request_limit")
+  storageLimitMb       Int                @default(50000) @map("storage_limit_mb")
+  currentStorageUsedMb Int                @default(1200) @map("current_storage_used_mb")
+  renewsAt             DateTime           @default(now()) @map("renews_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+model ConsentRecord {
+  id            String   @id @default(uuid())
+  customerId    String   @map("customer_id")
+  consentType   String   @map("consent_type")
+  policyVersion String   @map("policy_version")
+  isGranted     Boolean  @default(true) @map("is_granted")
+  channel       String   @default("PORTAL")
+  source        String   @default("OPT_IN")
+  timestamp     DateTime @default(now())
+
+  @@map("consent_records")
+}
+
+model PrivacyRequest {
+  id             String               @id @default(uuid())
+  organizationId String               @map("organization_id")
+  customerId     String               @map("customer_id")
+  requestType    PrivacyRequestType   @default(EXPORT) @map("request_type")
+  status         PrivacyRequestStatus @default(PENDING)
+  requestedAt    DateTime             @default(now()) @map("requested_at")
+  completedAt    DateTime?            @map("completed_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("privacy_requests")
+}
+
+model SystemHealthLog {
+  id          String             @id @default(uuid())
+  serviceName String             @map("service_name")
+  status      SystemHealthStatus @default(HEALTHY)
+  latencyMs   Int                @default(45) @map("latency_ms")
+  message     String             @default("Operational")
+  timestamp   DateTime           @default(now())
+
+  @@map("system_health_logs")
+}
+
+// =========================================================================
+// PHASE 8 — ADVANCED ANALYTICS, PREDICTIVE INTELLIGENCE & EXECUTIVE DASHBOARD
+// =========================================================================
+
+enum ForecastConfidence {
+  HIGH
+  MEDIUM
+  LOW
+  INSUFFICIENT_DATA
+}
+
+enum MaintenanceRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum CustomerSegment {
+  VIP
+  HIGH_VALUE
+  REPEAT
+  AT_RISK
+  INACTIVE
+  NEW
+}
+
+enum ExecutiveAlertCategory {
+  REVENUE
+  OCCUPANCY
+  MAINTENANCE
+  FLEET
+  MARINA
+  CRM
+  IOT
+}
+
+enum ExecutiveAlertSeverity {
+  INFO
+  WARNING
+  HIGH
+  CRITICAL
+}
+
+model AnalyticsMetric {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  branchId       String?  @map("branch_id")
+  metricKey      String   @map("metric_key")
+  metricValue    Float    @map("metric_value")
+  periodType     String   @default("DAILY") @map("period_type")
+  periodStart    DateTime @map("period_start")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("analytics_metrics")
+}
+
+model KpiDefinition {
+  id                String   @id @default(uuid())
+  organizationId    String   @map("organization_id")
+  kpiKey            String   @map("kpi_key")
+  name              String
+  currentValue      Float    @default(0) @map("current_value")
+  targetValue       Float    @map("target_value")
+  warningThreshold  Float    @map("warning_threshold")
+  criticalThreshold Float    @map("critical_threshold")
+  unit              String   @default("EUR")
+  timePeriod        String   @default("MONTHLY") @map("time_period")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("kpi_definitions")
+}
+
+model ForecastRun {
+  id             String             @id @default(uuid())
+  organizationId String             @map("organization_id")
+  forecastType   String             @map("forecast_type")
+  predictedValue Float              @map("predicted_value")
+  actualValue    Float?             @map("actual_value")
+  confidence     ForecastConfidence @default(MEDIUM)
+  runDate        DateTime           @default(now()) @map("run_date")
+  inputPeriod    String             @map("input_period")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("forecast_runs")
+}
+
+model ExecutiveAlert {
+  id                String                 @id @default(uuid())
+  organizationId    String                 @map("organization_id")
+  category          ExecutiveAlertCategory @default(REVENUE)
+  severity          ExecutiveAlertSeverity @default(WARNING)
+  title             String
+  message           String
+  recommendedAction String                 @map("recommended_action")
+  status            String                 @default("ACTIVE")
+  createdAt         DateTime               @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("executive_alerts")
+}
+
+model SavedReport {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  name           String
+  metricKeys     Json     @map("metric_keys")
+  dimensions     Json
+  filters        Json?
+  scheduleCron   String?  @map("schedule_cron")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("saved_reports")
+}
+
+model AiRecommendation {
+  id                 String   @id @default(uuid())
+  organizationId     String   @map("organization_id")
+  category           String
+  recommendationText String   @map("recommendation_text")
+  reasoningText      String   @map("reasoning_text")
+  dataSourcesUsed    Json     @map("data_sources_used")
+  potentialImpact    String   @map("potential_impact")
+  limitationsText    String   @map("limitations_text")
+  approvedStatus     String   @default("PENDING_HUMAN_REVIEW") @map("approved_status")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("ai_recommendations")
+}
+
+
+
+
+
+
