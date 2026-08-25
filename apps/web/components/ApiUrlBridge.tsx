@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-const localApiPrefix = 'http://localhost:4000/api/v1';
+const localApiPrefix = 'http://127.0.0.1:4000/api/v1';
 
 export default function ApiUrlBridge() {
   useEffect(() => {

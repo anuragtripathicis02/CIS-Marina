@@ -61,7 +61,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         });
       } catch (firstErr) {
         // Fallback to direct backend API port 4000
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:4000/api/v1';
         response = await fetch(`${baseUrl}/leads`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
