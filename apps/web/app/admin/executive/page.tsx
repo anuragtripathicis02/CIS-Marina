@@ -38,7 +38,7 @@ export default function ExecutiveCommandCenterPage() {
 
         <div className="flex items-center space-x-3">
           <Link
-            href="/admin/executive/ai"
+            href="/admin/crm/ai-assistant"
             className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-slate-950 font-bold text-xs shadow-md transition-transform hover:scale-105"
           >
             ✨ Ask AI Analytics Assistant →
@@ -102,7 +102,7 @@ export default function ExecutiveCommandCenterPage() {
           </p>
         </Link>
 
-        <Link href="/admin/executive/fleet" className="p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all space-y-3 block">
+        <Link href="/admin/operations/fleet" className="p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all space-y-3 block">
           <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xl">🛥️</div>
           <h3 className="font-serif text-xl font-bold text-white">Fleet &amp; Predictive Maintenance</h3>
           <p className="text-slate-400 text-xs leading-relaxed">
@@ -110,7 +110,7 @@ export default function ExecutiveCommandCenterPage() {
           </p>
         </Link>
 
-        <Link href="/admin/executive/marina" className="p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all space-y-3 block">
+        <Link href="/admin/marina" className="p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all space-y-3 block">
           <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xl">⚓</div>
           <h3 className="font-serif text-xl font-bold text-white">Marina &amp; Berth Analytics</h3>
           <p className="text-slate-400 text-xs leading-relaxed">
@@ -118,7 +118,7 @@ export default function ExecutiveCommandCenterPage() {
           </p>
         </Link>
 
-        <Link href="/admin/executive/customers" className="p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all space-y-3 block">
+        <Link href="/admin/customers" className="p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all space-y-3 block">
           <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xl">👑</div>
           <h3 className="font-serif text-xl font-bold text-white">Customer Intelligence &amp; CLV</h3>
           <p className="text-slate-400 text-xs leading-relaxed">
@@ -126,7 +126,7 @@ export default function ExecutiveCommandCenterPage() {
           </p>
         </Link>
 
-        <Link href="/admin/executive/reports" className="p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all space-y-3 block">
+        <Link href="/admin/financials" className="p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all space-y-3 block">
           <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xl">📊</div>
           <h3 className="font-serif text-xl font-bold text-white">Custom Report Builder &amp; CSV</h3>
           <p className="text-slate-400 text-xs leading-relaxed">
