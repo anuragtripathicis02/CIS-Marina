@@ -10,7 +10,7 @@ export const Navbar: React.FC = () => {
         
         {/* CIS-Marina Brand Logo */}
         <Link href="/" className="flex items-center space-x-3 group">
-          <div className="bg-white p-1.5 rounded-xl shadow-md group-hover:scale-105 transition-transform none items-center justify-center">
+          <div className="bg-white p-1.5 rounded-xl shadow-md group-hover:scale-105 transition-transform  hidden items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/cis-marina-logo.png" alt="CIS-Marina Logo" className="h-8 w-auto object-contain" />
           </div>
