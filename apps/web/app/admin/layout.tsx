@@ -136,7 +136,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Bottom Settings Icon */}
         <div className="flex flex-col items-center">
           <Link
-            href="/admin/settings"
+            href="/admin"
             className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
             title="Settings"
           >
