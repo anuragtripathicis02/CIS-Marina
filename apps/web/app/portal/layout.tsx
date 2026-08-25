@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { BrandLogo } from '@/components/layout/BrandLogo';
 
 export default function CustomerPortalLayout({ children }: { children: React.ReactNode }) {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -16,7 +17,7 @@ export default function CustomerPortalLayout({ children }: { children: React.Rea
         <Link href="/portal" className="flex items-center space-x-3 group">
           <div className="bg-white p-1.5 rounded-xl shadow-lg group-hover:scale-105 transition-transform flex items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/cis-marina-logo.png" alt="CIS-Marina Logo" className="h-8 w-auto object-contain" />
+            <BrandLogo alt="CIS-Marina Logo" className="h-8 w-auto object-contain" />
           </div>
           <div>
             <div className="font-serif text-lg font-bold text-white tracking-wider">CIS-<span className="text-amber-400">Marina</span></div>

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { BrandLogo } from '@/components/layout/BrandLogo';
 import {
   AnchorIcon,
   PlusIcon,
@@ -29,8 +30,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="space-y-5 flex flex-col items-center">
           {/* Logo Mark */}
           <Link href="/" className="w-10 h-10 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shadow-md hover:scale-105 transition-transform overflow-hidden" title="CIS-Marina Home">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/cis-marina-logo.png" alt="CIS-Marina" className="w-full h-full object-contain" />
+            <BrandLogo alt="CIS-Marina" className="w-full h-full object-contain" />
           </Link>
 
           {/* Quick Create (+) Action Button */}
@@ -155,8 +155,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* Organization Selector */}
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 p-0.5 flex items-center justify-center shadow-xs overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/cis-marina-logo.png" alt="CIS-Marina Logo" className="w-full h-full object-contain" />
+              <BrandLogo alt="CIS-Marina Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex items-center space-x-2 cursor-pointer hover:opacity-80">
               <span className="font-bold text-slate-900 text-sm tracking-tight">&quot;CIS-Marina Flagship Marina &amp; Yacht Club&quot;</span>

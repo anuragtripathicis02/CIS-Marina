@@ -8,6 +8,12 @@ export const metadata = {
   description: 'Charter Ocean Pearl 115 in Dubai Marina. Features 5 cabins, 12 guest capacity, gourmet dining, and water sports.',
 };
 
+export function generateStaticParams() {
+  return [{ id: 'y1' }, { id: 'y2' }];
+}
+
+export const dynamicParams = false;
+
 export default function YachtDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
