@@ -69,7 +69,7 @@ export default function ProfilePage() {
 
           <button
             onClick={handleSavePreferences}
-            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 font-bold text-xs shadow-md transition-transform hover:scale-105 cursor-pointer"
+            className="px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-md transition-transform hover:scale-105 cursor-pointer"
           >
             Save Security &amp; Preference Settings →
           </button>

@@ -32,7 +32,7 @@ export default function CustomerDashboardPage() {
     <div className="space-y-10 text-left font-sans">
       
       {/* Welcome Banner */}
-      <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950 border border-amber-500/30 shadow-2xl relative overflow-hidden space-y-4">
+      <div className="p-6 sm:p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-6 shadow-xl relative">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-10 relative">
           <div>
             <span className="px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-bold text-xs uppercase tracking-widest">
@@ -49,7 +49,7 @@ export default function CustomerDashboardPage() {
           <div className="flex items-center space-x-3 shrink-0 z-10 relative">
             <Link
               href="/portal/concierge"
-              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-slate-950 font-bold text-xs shadow-lg transition-transform hover:scale-105"
+              className="px-5 py-3 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-lg transition-transform hover:scale-105"
             >
               + Bespoke Concierge Request
             </Link>

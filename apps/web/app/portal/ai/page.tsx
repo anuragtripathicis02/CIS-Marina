@@ -90,7 +90,7 @@ export default function CustomerAiPage() {
           />
           <button
             onClick={() => handleSend()}
-            className="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 font-bold text-xs shadow-md cursor-pointer"
+            className="px-5 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-md cursor-pointer"
           >
             Send →
           </button>

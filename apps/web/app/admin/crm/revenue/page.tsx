@@ -102,24 +102,24 @@ export default function RevenueAnalyticsPage() {
       </div>
 
       {/* AI Pricing Recommendation Widget (Human-in-the-loop Safety) */}
-      <div className="bg-gradient-to-r from-slate-900 to-teal-950 text-white rounded-2xl p-6 shadow-xl space-y-4 border border-teal-800/80">
-        <div className="flex items-center justify-between border-b border-teal-800 pb-3">
+      <div className="bg-teal-50 text-slate-800 rounded-2xl p-6 shadow-sm space-y-4 border border-teal-200">
+        <div className="flex items-center justify-between border-b border-teal-200 pb-3">
           <div className="flex items-center space-x-2">
-            <span className="px-3 py-1 rounded-full bg-teal-800/80 text-teal-200 border border-teal-500/50 font-mono font-bold text-xs">
+            <span className="px-3 py-1 rounded-full bg-white text-teal-800 border border-teal-200 font-mono font-bold text-xs">
               🤖 AI PRICING RECOMMENDATIONS
             </span>
-            <span className="text-xs text-teal-300 font-mono">Manager Review &amp; Approval Required</span>
+            <span className="text-xs text-teal-700 font-mono">Manager Review &amp; Approval Required</span>
           </div>
         </div>
 
         <div className="space-y-3">
           {revenue.aiPricingRecommendations?.map((rec: any) => (
-            <div key={rec.targetId} className="p-4 rounded-xl bg-slate-800/90 border border-teal-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+            <div key={rec.targetId} className="p-4 rounded-xl bg-white border border-teal-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs shadow-sm">
               <div className="space-y-1">
-                <div className="font-bold text-white text-sm">{rec.targetName}</div>
-                <p className="text-teal-200">{rec.reason}</p>
-                <div className="font-mono text-slate-300">
-                  Current Rate: <span className="line-through text-slate-400">€{rec.currentPrice}</span> → Recommended Rate: <span className="font-bold text-emerald-400">€{rec.recommendedPrice}</span> / Night (+15%)
+                <div className="font-bold text-slate-900 text-sm">{rec.targetName}</div>
+                <p className="text-teal-800">{rec.reason}</p>
+                <div className="font-mono text-slate-600">
+                  Current Rate: <span className="line-through text-slate-400">€{rec.currentPrice}</span> → Recommended Rate: <span className="font-bold text-emerald-700">€{rec.recommendedPrice}</span> / Night (+15%)
                 </div>
               </div>
 

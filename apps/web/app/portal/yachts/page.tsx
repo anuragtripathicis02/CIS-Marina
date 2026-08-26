@@ -108,7 +108,7 @@ export default function ExploreYachtsPage() {
             </div>
 
             <div className="p-6 pt-0">
-              <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer">
+              <button className="w-full py-3 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-md transition-all cursor-pointer">
                 Check Dates &amp; Reserve Yacht →
               </button>
             </div>

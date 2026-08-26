@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export function generateStaticParams() {
-  return [{ id: 'y1' }, { id: 'y2' }];
+  return [{ id: 'y1' }, { id: 'y2' }, { id: 'y3' }];
 }
 
 export const dynamicParams = false;

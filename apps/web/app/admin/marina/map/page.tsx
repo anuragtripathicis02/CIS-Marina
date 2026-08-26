@@ -48,23 +48,23 @@ export default function VisualMarinaMapPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Map & Dock Grid Canvas */}
-        <div className="lg:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6 relative overflow-hidden min-h-[500px]">
+        <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6 relative overflow-hidden min-h-[500px]">
           
-          <div className="flex items-center justify-between text-xs font-mono text-slate-300 z-10 relative border-b border-slate-800 pb-3">
+          <div className="flex items-center justify-between text-xs font-mono text-slate-600 z-10 relative border-b border-slate-200 pb-3">
             <span>⚓ Dock Layout Plan • Basin Water Depth: 16.0 meters</span>
-            <span className="text-emerald-400">Total Capacity: 22 Berths</span>
+            <span className="text-emerald-700">Total Capacity: 22 Berths</span>
           </div>
 
-          <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#2dd4bf_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+          <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#99f6e4_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
           {/* Docks Sections */}
           <div className="space-y-6 z-10 relative">
             
             {/* Dock 1 */}
-            <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-5 space-y-3">
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-white text-sm">Dock Alpha (Quai Antoine 1er)</span>
-                <span className="text-xs font-mono text-teal-400">South Basin • 12 Slips</span>
+                <span className="font-bold text-slate-900 text-sm">Dock Alpha (Quai Antoine 1er)</span>
+                <span className="text-xs font-mono text-teal-700">South Basin • 12 Slips</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -79,12 +79,12 @@ export default function VisualMarinaMapPage() {
                     onClick={() => setSelectedBerth(b)}
                     className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all ${
                       selectedBerth?.id === b.id
-                        ? 'bg-teal-950 border-teal-400 text-white shadow-lg ring-2 ring-teal-500/50'
-                        : 'bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-300'
+                        ? 'bg-teal-50 border-teal-500 text-slate-900 shadow-md ring-2 ring-teal-500/30'
+                        : 'bg-white border-slate-200 hover:bg-teal-50/60 text-slate-600 shadow-sm'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-bold font-mono text-sm text-white">{b.berthNumber}</span>
+                      <span className="font-bold font-mono text-sm text-slate-900">{b.berthNumber}</span>
                       <span
                         className={`w-2.5 h-2.5 rounded-full ${
                           b.status === 'AVAILABLE'
@@ -98,8 +98,8 @@ export default function VisualMarinaMapPage() {
                       />
                     </div>
                     <div className="text-[10px] font-mono text-slate-400 mt-2 space-y-0.5">
-                      <div>Status: <span className="text-white font-bold">{b.status}</span></div>
-                      <div>Max: <span className="text-slate-300">{b.maxL} ft</span></div>
+                      <div>Status: <span className="text-slate-900 font-bold">{b.status}</span></div>
+                      <div>Max: <span className="text-slate-600">{b.maxL} ft</span></div>
                     </div>
                   </button>
                 ))}
@@ -107,10 +107,10 @@ export default function VisualMarinaMapPage() {
             </div>
 
             {/* Dock 2 */}
-            <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-5 space-y-3">
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-white text-sm">Dock Bravo (Quai des États-Unis)</span>
-                <span className="text-xs font-mono text-teal-400">North Basin • Superyacht Deep Water</span>
+                <span className="font-bold text-slate-900 text-sm">Dock Bravo (Quai des États-Unis)</span>
+                <span className="text-xs font-mono text-teal-700">North Basin • Superyacht Deep Water</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -123,12 +123,12 @@ export default function VisualMarinaMapPage() {
                     onClick={() => setSelectedBerth(b)}
                     className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all ${
                       selectedBerth?.id === b.id
-                        ? 'bg-teal-950 border-teal-400 text-white shadow-lg ring-2 ring-teal-500/50'
-                        : 'bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-300'
+                        ? 'bg-teal-50 border-teal-500 text-slate-900 shadow-md ring-2 ring-teal-500/30'
+                        : 'bg-white border-slate-200 hover:bg-teal-50/60 text-slate-600 shadow-sm'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-bold font-mono text-sm text-white">{b.berthNumber}</span>
+                      <span className="font-bold font-mono text-sm text-slate-900">{b.berthNumber}</span>
                       <span
                         className={`w-2.5 h-2.5 rounded-full ${
                           b.status === 'AVAILABLE' ? 'bg-emerald-400' : 'bg-teal-400 animate-pulse'
@@ -136,8 +136,8 @@ export default function VisualMarinaMapPage() {
                       />
                     </div>
                     <div className="text-[10px] font-mono text-slate-400 mt-2 space-y-0.5">
-                      <div>Status: <span className="text-white font-bold">{b.status}</span></div>
-                      <div>Max: <span className="text-slate-300">{b.maxL} ft</span></div>
+                      <div>Status: <span className="text-slate-900 font-bold">{b.status}</span></div>
+                      <div>Max: <span className="text-slate-600">{b.maxL} ft</span></div>
                     </div>
                   </button>
                 ))}

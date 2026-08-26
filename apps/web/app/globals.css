@@ -7,3 +7,136 @@
     @apply bg-slate-50 text-slate-900 antialiased;
   }
 }
+
+@layer components {
+  .portal-light .bg-slate-950,
+  .portal-light .bg-slate-950\/60,
+  .portal-light .bg-slate-950\/80 {
+    background-color: rgb(248 250 252) !important;
+  }
+
+  .portal-light .bg-slate-900,
+  .portal-light .bg-slate-900\/90,
+  .portal-light .bg-slate-900\/95 {
+    background-color: rgb(255 255 255) !important;
+  }
+
+  .portal-light .bg-slate-800,
+  .portal-light .bg-slate-800\/80 {
+    background-color: rgb(241 245 249) !important;
+  }
+
+  .portal-light .border-slate-800,
+  .portal-light .border-slate-800\/60,
+  .portal-light .border-slate-800\/80 {
+    border-color: rgb(226 232 240) !important;
+  }
+
+  .portal-light .text-white {
+    color: rgb(15 23 42) !important;
+  }
+
+  .portal-light .text-slate-100,
+  .portal-light .text-slate-200,
+  .portal-light .text-slate-300 {
+    color: rgb(71 85 105) !important;
+  }
+
+  .portal-light .text-amber-300,
+  .portal-light .text-amber-400 {
+    color: rgb(180 83 9) !important;
+  }
+
+  .portal-light .hover\:text-amber-400:hover {
+    color: rgb(146 64 14) !important;
+  }
+
+  .portal-light .hover\:bg-amber-500:hover {
+    background-color: rgb(217 119 6) !important;
+  }
+
+  .portal-light .hover\:bg-amber-500\/20:hover {
+    background-color: rgb(254 215 170) !important;
+  }
+
+  .portal-light .bg-amber-500.text-white,
+  .portal-light .bg-amber-600.text-white,
+  .portal-light .bg-amber-700.text-white,
+  .portal-light .bg-red-800.text-white,
+  .portal-light .bg-teal-600.text-white,
+  .portal-light .bg-teal-700.text-white {
+    color: rgb(255 255 255) !important;
+  }
+
+  .staff-light .bg-slate-950,
+  .staff-light .bg-slate-950\/40,
+  .staff-light .bg-slate-950\/50,
+  .staff-light .bg-slate-950\/60,
+  .staff-light .bg-slate-900,
+  .staff-light .bg-slate-900\/60,
+  .staff-light .bg-slate-900\/80,
+  .staff-light .bg-slate-900\/90 {
+    background-color: rgb(248 250 252) !important;
+  }
+
+  .staff-light .bg-slate-800,
+  .staff-light .bg-slate-800\/80,
+  .staff-light .bg-slate-800\/90 {
+    background-color: rgb(255 255 255) !important;
+  }
+
+  .staff-light .bg-slate-700 {
+    background-color: rgb(241 245 249) !important;
+  }
+
+  .staff-light .bg-red-950\/30 {
+    background-color: rgb(254 242 242) !important;
+  }
+
+  .staff-light .border-slate-800,
+  .staff-light .border-slate-800\/80,
+  .staff-light .border-slate-700,
+  .staff-light .border-slate-700\/80 {
+    border-color: rgb(226 232 240) !important;
+  }
+
+  .staff-light .text-white,
+  .staff-light .text-slate-100,
+  .staff-light .text-slate-200,
+  .staff-light .text-slate-300 {
+    color: rgb(15 23 42) !important;
+  }
+
+  .staff-light .text-slate-400 {
+    color: rgb(100 116 139) !important;
+  }
+
+  .staff-light .text-teal-300,
+  .staff-light .text-teal-400 {
+    color: rgb(15 118 110) !important;
+  }
+
+  .staff-light .text-amber-300,
+  .staff-light .text-amber-400 {
+    color: rgb(180 83 9) !important;
+  }
+
+  .staff-light .shadow-teal-950\/20 {
+    --tw-shadow-color: rgb(13 148 136 / 0.14) !important;
+  }
+
+  .staff-light .bg-amber-500\/10,
+  .staff-light .bg-amber-500\/20 {
+    background-color: rgb(255 247 237) !important;
+  }
+
+  .staff-light .bg-red-500\/10,
+  .staff-light .bg-red-500\/20 {
+    background-color: rgb(254 242 242) !important;
+  }
+
+  .staff-light .bg-emerald-500\/10,
+  .staff-light .bg-emerald-500\/20 {
+    background-color: rgb(236 253 245) !important;
+  }
+}

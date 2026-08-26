@@ -95,7 +95,7 @@ export default function ConciergePage() {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 font-bold text-xs shadow-lg transition-transform hover:scale-105 cursor-pointer"
+              className="w-full py-3 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-lg transition-transform hover:scale-105 cursor-pointer"
             >
               👑 Submit Request to Concierge Team →
             </button>

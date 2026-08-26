@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
@@ -50,8 +51,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-slate-50 text-slate-800 flex items-center justify-center p-4 font-sans">
       <div className="max-w-md w-full bg-white border border-slate-200 rounded-3xl p-8 space-y-6 text-left shadow-xl">
         <div className="text-center space-y-2">
-          <Link href="/" className="inline-block font-display text-3xl font-bold text-slate-900">
-            NAUTIC<span className="text-gold-600">OS</span>
+          <Link href="/" className="inline-block mb-4" aria-label="CIS-Marina home">
+            <div className="flex flex-col"><span className="font-display text-3xl font-bold text-black tracking-tight leading-none">CIS-<span className="text-amber-400">Marina</span></span><span className="text-[12px] font-mono text-slate-400 font-semibold tracking-wider uppercase mt-0.5">We make IT possible!</span></div>
           </Link>
           <h1 className="text-xl font-bold text-slate-900">Sign In to SaaS Console</h1>
           <p className="text-xs text-slate-500">Enter your operational credentials to access your organization workspace</p>

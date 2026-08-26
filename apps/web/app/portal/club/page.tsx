@@ -110,7 +110,7 @@ export default function ClubPage() {
                 ) : (
                   <button
                     onClick={() => handleRegisterOrWaitlist(evt.id)}
-                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-slate-950 font-bold text-xs cursor-pointer shadow-md"
+                    className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs cursor-pointer shadow-md"
                   >
                     + Register for Event
                   </button>

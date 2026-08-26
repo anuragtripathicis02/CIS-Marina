@@ -44,7 +44,7 @@ export default function IndustriesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-navy-900 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
       <Navbar />
       
       <main className="flex-grow py-16">
@@ -52,13 +52,13 @@ export default function IndustriesPage() {
           
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-500 text-xs font-semibold uppercase tracking-wider">
+            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-gold-50 border border-gold-200 text-gold-700 text-xs font-semibold uppercase tracking-wider">
               <span>🏢 Industry Vertical Solutions</span>
             </div>
-            <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white">
+            <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-slate-900">
               Built Around Your Business
             </h1>
-            <p className="text-slate-300 text-base sm:text-lg">
+            <p className="text-slate-600 text-base sm:text-lg">
               Discover how NAUTICOS adapts to the specific operational demands of your sector in the global luxury marine ecosystem.
             </p>
           </div>
@@ -66,15 +66,15 @@ export default function IndustriesPage() {
           {/* Verticals Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {verticals.map((vert, idx) => (
-              <div key={idx} className="p-8 rounded-2xl bg-navy-950 border border-slate-800 space-y-4 flex flex-col justify-between">
+              <div key={idx} className="p-8 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
                 <div className="space-y-3">
-                  <h2 className="font-display text-2xl font-bold text-white">{vert.title}</h2>
-                  <p className="text-slate-300 text-xs leading-relaxed">{vert.desc}</p>
-                  <div className="pt-2 text-xs font-bold text-gold-500 uppercase tracking-wider">Key Operational Capabilities:</div>
-                  <ul className="space-y-2 text-xs text-slate-300">
+                  <h2 className="font-display text-2xl font-bold text-slate-900">{vert.title}</h2>
+                  <p className="text-slate-600 text-xs leading-relaxed">{vert.desc}</p>
+                  <div className="pt-2 text-xs font-bold text-gold-700 uppercase tracking-wider">Key Operational Capabilities:</div>
+                  <ul className="space-y-2 text-xs text-slate-600">
                     {vert.keyNeeds.map((need, i) => (
                       <li key={i} className="flex items-center space-x-2">
-                        <span className="text-gold-500">✓</span>
+                        <span className="text-gold-600">✓</span>
                         <span>{need}</span>
                       </li>
                     ))}
@@ -83,7 +83,7 @@ export default function IndustriesPage() {
                 <div className="pt-4">
                   <Link
                     href="/demo"
-                    className="inline-flex items-center space-x-2 text-xs text-gold-500 font-bold hover:underline"
+                    className="inline-flex items-center space-x-2 text-xs text-gold-700 font-bold hover:underline"
                   >
                     <span>Request Industry Demo</span>
                     <span>→</span>

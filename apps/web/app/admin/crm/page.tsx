@@ -42,22 +42,22 @@ export default function CrmDashboardPage() {
       </div>
 
       {/* AI Daily Business Summary Widget (Requirement 67) */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-900 to-indigo-950 text-white shadow-xl space-y-3 relative overflow-hidden">
+      <div className="p-6 rounded-2xl bg-purple-50 border border-purple-200 text-slate-800 shadow-sm space-y-3 relative overflow-hidden">
         <div className="flex items-center justify-between z-10 relative">
           <div className="flex items-center space-x-2">
-            <span className="px-3 py-1 rounded-full bg-purple-800/80 border border-purple-400/50 text-purple-200 font-mono font-bold text-xs">
+            <span className="px-3 py-1 rounded-full bg-white border border-purple-200 text-purple-800 font-mono font-bold text-xs">
               🤖 AI DAILY BUSINESS SUMMARY
             </span>
-            <span className="text-xs font-mono text-purple-300">Updated 10 min ago</span>
+            <span className="text-xs font-mono text-purple-700">Updated 10 min ago</span>
           </div>
-          <span className="text-xs font-mono text-purple-300 font-bold">Human-in-the-Loop Active</span>
+          <span className="text-xs font-mono text-purple-700 font-bold">Human-in-the-Loop Active</span>
         </div>
 
-        <div className="z-10 relative space-y-1.5 text-xs text-purple-100 font-mono leading-relaxed">
-          <div>• <span className="font-bold text-white">14 New Inbound Leads</span> generated this week (Top source: Website &amp; Riviera Search).</div>
-          <div>• <span className="font-bold text-white">5 Leads Qualified</span> for high-value charter packages (&gt; €25,000 budget).</div>
-          <div>• <span className="font-bold text-teal-300">€136,900 Total Revenue</span> recorded across Charter, Marina, and Yacht Club.</div>
-          <div>• <span className="font-bold text-amber-300">2 Overdue Follow-Ups</span> require urgent sales rep attention today (Harrison Sterling).</div>
+        <div className="z-10 relative space-y-1.5 text-xs text-purple-900 font-mono leading-relaxed">
+          <div>• <span className="font-bold text-slate-900">14 New Inbound Leads</span> generated this week (Top source: Website &amp; Riviera Search).</div>
+          <div>• <span className="font-bold text-slate-900">5 Leads Qualified</span> for high-value charter packages (&gt; €25,000 budget).</div>
+          <div>• <span className="font-bold text-teal-700">€136,900 Total Revenue</span> recorded across Charter, Marina, and Yacht Club.</div>
+          <div>• <span className="font-bold text-amber-700">2 Overdue Follow-Ups</span> require urgent sales rep attention today (Harrison Sterling).</div>
         </div>
       </div>
 
