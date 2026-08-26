@@ -52,10 +52,15 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex items-center justify-center p-4 font-sans">
-      <div className="max-w-md w-full bg-white border border-slate-200 rounded-3xl p-8 space-y-6 text-left shadow-xl">
+      <div className="relative max-w-md w-full bg-white border border-slate-200 rounded-3xl p-8 space-y-6 text-left shadow-xl">
+        <Link href="/" aria-label="Close and return home" className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full text-xl leading-none text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700">
+          ×
+        </Link>
         <div className="text-center space-y-2">
-          <Link href="/" className="inline-block font-display text-3xl font-bold text-slate-900">
-            NAUTIC<span className="text-gold-600">OS</span>
+          <Link href="/" className="inline-block mb-4" aria-label="CIS-Marina home">
+            <div className="flex flex-col">
+              <span className="font-display text-3xl font-bold text-black tracking-tight leading-none">CIS-<span className="text-amber-400">Marina</span></span><span className="text-[12px] font-mono text-slate-400 font-semibold tracking-wider uppercase mt-0.5">We make IT possible!</span>
+            </div>
           </Link>
           <h1 className="text-xl font-bold text-slate-900">Create Owner Account</h1>
           <p className="text-xs text-slate-500">Step 1 of 2: Create user credentials for organization setup</p>
