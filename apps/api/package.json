@@ -6,7 +6,7 @@
     "build": "prisma generate && nest build",
     "prisma:generate": "prisma generate",
     "dev": "prisma generate && prisma db push --accept-data-loss && nest start --watch",
-    "start": "nest start",
+    "start": "node dist/main.js",
     "lint": "eslint \"src/**/*.ts\"",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist"
