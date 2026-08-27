@@ -29,7 +29,7 @@ export default function RegisterPage() {
           body: JSON.stringify(form),
         });
       } catch (e) {
-        res = await fetch('http://localhost:4000/api/v1/auth/signup', {
+        res = await fetch('https://yacht-api-0jdl.onrender.com/api/v1/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(form),

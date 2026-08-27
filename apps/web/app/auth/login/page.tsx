@@ -26,7 +26,7 @@ export default function LoginPage() {
           body: JSON.stringify({ email, password }),
         });
       } catch (e) {
-        res = await fetch('http://localhost:4000/api/v1/auth/login', {
+        res = await fetch('https://yacht-api-0jdl.onrender.com/api/v1/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),

@@ -28,7 +28,7 @@ export default function OnboardingPage() {
           body: JSON.stringify(form),
         });
       } catch (e) {
-        await fetch('http://localhost:4000/api/v1/organizations/onboard', {
+        await fetch('https://yacht-api-0jdl.onrender.com/api/v1/organizations/onboard', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(form),
