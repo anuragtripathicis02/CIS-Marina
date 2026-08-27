@@ -4,7 +4,7 @@ services:
     env: node
     plan: free
     buildCommand: bash ./render-build.sh
-    startCommand: cd apps/api && pnpm run start
+    startCommand: cd apps/api && node dist/main.js
     envVars:
       - key: NODE_ENV
         value: production

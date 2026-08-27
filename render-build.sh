@@ -13,6 +13,12 @@ echo "Converting Prisma schema to PostgreSQL for Render free tier..."
 # Sed replaces "mysql" with "postgresql" in the schema file
 sed -i 's/provider\s*=\s*"mysql"/provider = "postgresql"/g' apps/api/prisma/schema.prisma
 
+echo "Generating Prisma Client and Pushing to Database..."
+cd apps/api
+npx prisma generate
+npx prisma db push --accept-data-loss
+cd ../..
+
 echo "Building Turborepo..."
 npx turbo run build --filter=@yacht-platform/api
 
