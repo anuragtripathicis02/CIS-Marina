@@ -91,21 +91,25 @@ export class MockIoTProviderService implements IIoTProvider, OnModuleInit, OnMod
     battery: number,
     engineTemp: number,
   ) {
-    // 1. Ingest Normalized Telemetry
-    await this.ingestionService.ingestTelemetry({
-      deviceId,
-      timestamp: new Date().toISOString(),
-      eventId: `sim-${Date.now()}-${yachtId}`,
-      metrics: metrics.map((m) => ({ ...m, quality: TelemetryQuality.GOOD })),
-    });
+    try {
+      // 1. Ingest Normalized Telemetry
+      await this.ingestionService.ingestTelemetry({
+        deviceId,
+        timestamp: new Date().toISOString(),
+        eventId: `sim-${Date.now()}-${yachtId}`,
+        metrics: metrics.map((m) => ({ ...m, quality: TelemetryQuality.GOOD })),
+      });
 
-    // 2. Evaluate Alert Rules (Battery, Speed, Engine Temp)
-    await this.alertService.evaluateMetric(orgId, yachtId, deviceId, MetricType.BATTERY_VOLTAGE, battery);
-    await this.alertService.evaluateMetric(orgId, yachtId, deviceId, MetricType.SPEED, speed);
-    await this.alertService.evaluateMetric(orgId, yachtId, deviceId, MetricType.ENGINE_TEMP, engineTemp);
+      // 2. Evaluate Alert Rules (Battery, Speed, Engine Temp)
+      await this.alertService.evaluateMetric(orgId, yachtId, deviceId, MetricType.BATTERY_VOLTAGE, battery);
+      await this.alertService.evaluateMetric(orgId, yachtId, deviceId, MetricType.SPEED, speed);
+      await this.alertService.evaluateMetric(orgId, yachtId, deviceId, MetricType.ENGINE_TEMP, engineTemp);
 
-    // 3. Evaluate Geofence Entry/Exit
-    await this.geofenceService.evaluateLocation(orgId, yachtId, deviceId, lat, lng);
+      // 3. Evaluate Geofence Entry/Exit
+      await this.geofenceService.evaluateLocation(orgId, yachtId, deviceId, lat, lng);
+    } catch (error) {
+      console.warn(`[MockIoT Simulator] Tick skipped for ${deviceId} (Database empty or not initialized): ${error.message}`);
+    }
   }
 
   // IIoTProvider Required Contract Implementation

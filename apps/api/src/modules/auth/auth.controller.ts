@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -13,13 +13,21 @@ export class AuthController {
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Register new user account' })
-  async signup(@Body() dto: SignupDto): Promise<IApiResponse> {
-    const data = await this.authService.signup(dto);
-    return {
-      success: true,
-      data,
-      meta: { timestamp: new Date().toISOString(), correlationId: `auth-${Date.now()}` },
-    };
+  async signup(@Body() dto: SignupDto, @Res() res: any): Promise<any> {
+    try {
+      const data = await this.authService.signup(dto);
+      return res.status(HttpStatus.CREATED).json({
+        success: true,
+        data,
+        meta: { timestamp: new Date().toISOString(), correlationId: `auth-${Date.now()}` },
+      });
+    } catch (error: any) {
+      console.error('Signup Error:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: { message: error.message || 'Unknown error occurred', stack: error.stack },
+      });
+    }
   }
 
   @Post('login')

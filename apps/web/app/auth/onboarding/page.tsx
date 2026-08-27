@@ -163,10 +163,10 @@ export default function OnboardingPage() {
             </p>
 
             <button
-              onClick={() => router.push('/admin')}
+              onClick={() => router.push('/auth/login')}
               className="w-full py-3.5 rounded-xl bg-teal-600 text-white font-bold text-sm shadow-md hover:bg-teal-700 cursor-pointer transition-colors"
             >
-              Enter Operator SaaS Dashboard →
+              Continue to Login →
             </button>
           </div>
         )}

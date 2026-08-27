@@ -1,7 +1,30 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
+try {
+  // apps/api/dist/main.js -> ../../../.env
+  const envPath = path.resolve(__dirname, '../../../.env');
+  if (fs.existsSync(envPath)) {
+    const envConfig = fs.readFileSync(envPath, 'utf8');
+    envConfig.split('\n').forEach((line) => {
+      const match = line.match(/^([^=]+)=(.*)$/);
+      if (match && !process.env[match[1].trim()]) {
+        process.env[match[1].trim()] = match[2].trim();
+      }
+    });
+  }
+} catch (e) {
+  console.error("Failed to load .env:", e);
+}
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+
+
+
+import { execSync } from 'child_process';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

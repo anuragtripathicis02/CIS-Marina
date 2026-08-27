@@ -1,6 +1,6 @@
 // Prisma Schema for Smart Yacht & Marina Management Platform (Phase 1 & Phase 2 Operations)
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 

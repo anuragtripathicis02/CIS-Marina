@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: yacht-api
+    env: node
+    buildCommand: pnpm install && pnpm turbo run build --filter=@yacht-platform/api
+    startCommand: cd apps/api && pnpm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: ALLOWED_ORIGINS
+        value: "https://your-vercel-frontend.vercel.app" # Ise apne vercel URL se replace karein
+      - key: DATABASE_URL
+        sync: false # Render dashboard mein yahan apne Cloud MySQL ka URL dalein
+      - key: REDIS_HOST
+        value: "localhost" # Agar redis use nahi kar rahe toh ignore karein
