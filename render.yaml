@@ -2,6 +2,7 @@ services:
   - type: web
     name: yacht-api
     env: node
+    plan: free
     buildCommand: bash ./render-build.sh
     startCommand: cd apps/api && pnpm run start
     envVars:
